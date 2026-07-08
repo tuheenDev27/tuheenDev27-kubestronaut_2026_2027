@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: 2nd-application-backend
+  labels:
+    app: 2nd-application-backend
+spec:
+  containers:
+    - name: 2nd-application-backend
+      image: docker.io/tuheen27/application-backend:v0.2
