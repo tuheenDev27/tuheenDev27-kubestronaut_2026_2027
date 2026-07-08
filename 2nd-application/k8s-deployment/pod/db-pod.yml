@@ -1,0 +1,11 @@
+# create a pod for db
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mongodb
+  labels:
+    app: mongodb
+spec:
+  containers:
+    - name: mongodb
+      image: mongo:latest

@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: application-frontend
+  labels:
+    app: 2-nd-application-frontend
+    tier: frontend
+spec:
+  type: NodePort
+  ports:
+    - port: 5000
+      targetPort: 5000
+      nodePort: 30001
+  selector:
+    app: 2-nd-application-frontend
+    tier: frontend
