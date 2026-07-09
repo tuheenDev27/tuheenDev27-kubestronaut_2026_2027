@@ -21,6 +21,6 @@ RUN addgroup -S app && adduser -S app -G app
 
 USER app
 
-EXPOSE 3000
+EXPOSE 5001
 
 CMD ["node", "app.js"]
