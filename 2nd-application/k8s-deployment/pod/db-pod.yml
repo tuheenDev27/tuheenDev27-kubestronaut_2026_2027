@@ -5,6 +5,7 @@ metadata:
   name: mongodb
   labels:
     app: mongodb
+    tier: database
 spec:
   containers:
     - name: mongodb

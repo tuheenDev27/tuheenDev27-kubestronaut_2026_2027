@@ -1,10 +1,14 @@
+import os
 from flask import Flask, request, render_template_string
 from pymongo import MongoClient
 
 app = Flask(__name__)
 
-# Connect to the MongoDB container running on localhost
-client = MongoClient("mongodb://localhost:27017/")
+# Dynamically pull the MongoDB URI from the environment
+# Defaults to localhost for local testing outside of containers
+MONGO_URI = os.environ.get("MONGO_URI", "mongodb://localhost:27017/")
+client = MongoClient(MONGO_URI, serverSelectionTimeoutMS=2000)
+
 db = client["user_database"]
 collection = db["users"]
 
@@ -33,20 +37,22 @@ def index():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    # Capture user input from the form
     user_name = request.form.get('name')
     user_role = request.form.get('role')
     
-    # Create a document and insert it into MongoDB
     user_document = {
         "name": user_name,
         "role": user_role
     }
-    collection.insert_one(user_document)
     
-    success_message = f"Successfully added {user_name} to the database!"
+    try:
+        collection.insert_one(user_document)
+        success_message = f"Successfully added {user_name} to the database!"
+    except Exception as e:
+        success_message = f"Database error: {e}"
+        
     return render_template_string(HTML_FORM, message=success_message)
 
 if __name__ == '__main__':
-    # Run the Flask app on port 5000
+    # Listen on all network interfaces (0.0.0.0) so traffic can reach the container
     app.run(host='0.0.0.0', port=5000, debug=True)

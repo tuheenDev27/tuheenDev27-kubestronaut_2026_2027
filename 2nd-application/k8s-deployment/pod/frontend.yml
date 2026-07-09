@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: 2-nd-application-frontend
+  name: application-frontend
   labels:
-    app: 2-nd-application-frontend
+    app: application-frontend
     tier: frontend
 spec:
   containers:
-    - name: 2-nd-application-frontend
+    - name: application-frontend
       image: docker.io/tuheen27/application-frontend:v.0
