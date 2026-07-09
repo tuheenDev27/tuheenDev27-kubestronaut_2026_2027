@@ -1,12 +1,13 @@
-# create a pod for db
 apiVersion: v1
 kind: Pod
 metadata:
-  name: mongodb
+  name: mongodb-pod
   labels:
-    app: mongodb
-    tier: database
+    # This label connects the Pod to the Service above
+    app: database 
 spec:
   containers:
-    - name: mongodb
-      image: mongo:latest
+  - name: mongodb
+    image: mongo:latest
+    ports:
+    - containerPort: 27017

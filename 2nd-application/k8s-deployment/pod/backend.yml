@@ -3,8 +3,14 @@ kind: Pod
 metadata:
   name: application-backend
   labels:
+    name: application-backend
     app: application-backend
 spec:
   containers:
     - name: application-backend
-      image: docker.io/tuheen27/application-backend:v0.2
+      image: docker.io/tuheen27/application-backend:v0.5
+      ports:
+        - containerPort: 5001
+      env:
+        - name: MONGO_URI
+          value: "mongodb://mongodb-svc:27017/"

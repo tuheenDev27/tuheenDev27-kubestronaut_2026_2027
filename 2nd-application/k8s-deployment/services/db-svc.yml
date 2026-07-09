@@ -1,13 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongodb-service  # Your application will use this name as the host
-  namespace: default     # Ensure this matches your pod's namespace
+  name: mongodb-svc
 spec:
-  type: ClusterIP        # Exposes the service on a cluster-internal IP
   selector:
-    app: mongodb        # MUST exactly match the 'labels.app' inside your MongoDB pod
+    app: database
   ports:
     - protocol: TCP
-      port: 27017       # The port your application pods will connect to
-      targetPort: 27017 # The port your MongoDB container is listening on
+      port: 27017
+      targetPort: 27017
