@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: flask-game-pod
+  labels:
+    app: flask-game
+    type: fullstack
+spec:
+  containers:
+    - name: flask-app
+      image: docker.io/tuheen27/gameing-application:v1.0.0
+      ports:
+        - containerPort: 5000

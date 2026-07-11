@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flask-app-deploument
+  labels:
+    app: flask-app
+    type: fullstack
+spec:
+  replicas: 4
+  selector:
+    matchLabels:
+      app: flask-app
+      type: fullstack
+  template:
+    metadata:
+      name: flask-app
+      labels:
+        app: flask-app
+        type: fullstack
+    spec:
+      containers:
+        - name: flask-app
+          image: docker.io/tuheen27/gameing-application:v1.0.0
+          ports:
+            - containerPort: 5000
