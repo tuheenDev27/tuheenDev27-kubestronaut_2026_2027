@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .cell {
+            transition: all 0.3s ease;
+        }
+        .cell:hover {
+            background-color: #e5e7eb;
+        }
+        .disabled {
+            pointer-events: none;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+        <h1 class="text-3xl font-bold mb-4 text-gray-800">Tic Tac Toe</h1>
+        <div id="status" class="text-lg mb-4 text-gray-600">Player X's Turn</div>
+        <div class="grid grid-cols-3 gap-2 w-64 mx-auto">
+            <div class="cell bg-gray-200 h-20 flex items-center justify-center text-2xl font-bold cursor-pointer" onclick="makeMove(0)"></div>
+            <div class="cell bg-gray-200 h-20 flex items-center justify-center text-2xl font-bold cursor-pointer" onclick="makeMove(1)"></div>
+            <div class="cell bg-gray-200 h-20 flex items-center justify-center text-2xl font-bold cursor-pointer" onclick="makeMove(2)"></div>
+            <div class="cell bg-gray-200 h-20 flex items-center justify-center text-2xl font-bold cursor-pointer" onclick="makeMove(3)"></div>
+            <div class="cell bg-gray-200 h-20 flex items-center justify-center text-2xl font-bold cursor-pointer" onclick="makeMove(4)"></div>
+            <div class="cell bg-gray-200 h-20 flex items-center justify-center text-2xl font-bold cursor-pointer" onclick="makeMove(5)"></div>
+            <div class="cell bg-gray-200 h-20 flex items-center justify-center text-2xl font-bold cursor-pointer" onclick="makeMove(6)"></div>
+            <div class="cell bg-gray-200 h-20 flex items-center justify-center text-2xl font-bold cursor-pointer" onclick="makeMove(7)"></div>
+            <div class="cell bg-gray-200 h-20 flex items-center justify-center text-2xl font-bold cursor-pointer" onclick="makeMove(8)"></div>
+        </div>
+        <button id="reset" class="mt-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition">Reset Game</button>
+    </div>
+
+    <script>
+        async function makeMove(index) {
+            const response = await fetch('/move', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ index })
+            });
+            const data = await response.json();
+
+            if (response.ok) {
+                updateBoard(data);
+            } else {
+                alert(data.error);
+            }
+        }
+
+        async function resetGame() {
+            const response = await fetch('/reset', {
+                method: 'POST'
+            });
+            const data = await response.json();
+            updateBoard(data);
+        }
+
+        function updateBoard(data) {
+            const cells = document.querySelectorAll('.cell');
+            cells.forEach((cell, i) => {
+                // Clear previous styles and content
+                cell.textContent = data.board[i];
+                cell.classList.remove('text-blue-600', 'text-red-600', 'disabled');
+
+                // Apply new styles based on board content
+                if (data.board[i] === 'X') {
+                    cell.classList.add('text-blue-600');
+                } else if (data.board[i] === 'O') {
+                    cell.classList.add('text-red-600');
+                }
+            });
+
+            const status = document.getElementById('status');
+            if (data.winner) {
+                status.textContent = data.winner === 'Draw' ? "It's a Draw!" : `Player ${data.winner} Wins!`;
+                cells.forEach(cell => cell.classList.add('disabled'));
+            } else {
+                status.textContent = `Player ${data.current_player}'s Turn`;
+            }
+        }
+
+        document.getElementById('reset').addEventListener('click', resetGame);
+    </script>
+</body>
+</html>
